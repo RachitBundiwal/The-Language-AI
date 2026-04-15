@@ -1,0 +1,36 @@
+export const BASE_URL = "http://localhost:8000";
+
+export const API = {
+  health: "/health",
+  transcribe: "/api/v1/voice/transcribe",
+  scorePronunciation: "/api/v1/voice/score-pronunciation",
+  fullExercise: "/api/v1/voice/full-exercise",
+  tts: "/api/v1/voice/tts",
+  voices: "/api/v1/voice/voices",
+  chat: "/api/v1/conversation/chat",
+  chatStream: "/api/v1/conversation/chat/stream",
+  evaluateWriting: "/api/v1/conversation/evaluate-writing",
+  generateDialogue: "/api/v1/conversation/generate-dialogue",
+  stats: "/api/v1/progress/stats",
+  lessons: "/api/v1/lessons",
+  lessonDetail: (id: number) => `/api/v1/lessons/${id}`,
+  completeLesson: (id: number) => `/api/v1/lessons/${id}/complete`,
+  submitExercise: (id: number) => `/api/v1/lessons/${id}/submit-exercise`,
+  generateExercise: (id: number) => `/api/v1/lessons/${id}/generate-exercise`,
+  vocabDue: "/api/v1/progress/vocabulary/due",
+  vocabReview: "/api/v1/progress/vocabulary/review",
+  vocabAdd: "/api/v1/progress/vocabulary/add",
+  pronunciationHistory: "/api/v1/progress/pronunciation/history",
+  examPaper: (level: string, section: string) =>
+    `/api/v1/exams/paper/${level}/${section}`,
+  submitExam: (section: string) =>
+    `/api/v1/exams/submit/${section.toLowerCase()}`,
+  examHistory: "/api/v1/exams/history",
+  examReadiness: "/api/v1/exams/readiness",
+  analyticsFull: "/api/v1/analytics/full",
+  analyticsWeekly: "/api/v1/analytics/weekly",
+  analyticsPronunciationTrend: "/api/v1/analytics/pronunciation-trend",
+  analyticsHeatmap: "/api/v1/analytics/heatmap",
+  analyticsXpProgression: "/api/v1/analytics/xp-progression",
+  analyticsAchievements: "/api/v1/analytics/achievements",
+} as const;
