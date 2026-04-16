@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from typing import AsyncGenerator
 
+from sqlalchemy import event
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
@@ -12,7 +13,26 @@ from sqlalchemy.orm import declarative_base
 
 DATABASE_URL = "sqlite+aiosqlite:///./sprechen.db"
 
-engine = create_async_engine(DATABASE_URL, echo=False, future=True)
+engine = create_async_engine(
+    DATABASE_URL,
+    echo=False,
+    future=True,
+    connect_args={"timeout": 30},
+    pool_size=50,
+    max_overflow=100,
+    pool_pre_ping=True,
+)
+
+
+@event.listens_for(engine.sync_engine, "connect")
+def _sqlite_pragmas(dbapi_conn, _record):
+    cur = dbapi_conn.cursor()
+    cur.execute("PRAGMA journal_mode=WAL")
+    cur.execute("PRAGMA synchronous=NORMAL")
+    cur.execute("PRAGMA busy_timeout=30000")
+    cur.execute("PRAGMA foreign_keys=ON")
+    cur.close()
+
 
 AsyncSessionLocal = async_sessionmaker(
     bind=engine,

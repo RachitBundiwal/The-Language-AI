@@ -9,6 +9,7 @@ from sqlalchemy import desc, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.cache import cache_response
+from models.database import AsyncSessionLocal
 from models.orm_models import (
     Achievement,
     GrammarError,
@@ -51,13 +52,19 @@ class AnalyticsService:
     # ------------------------------------------------------------------
     @cache_response(ttl=60)
     async def get_full_stats(self, db: AsyncSession) -> Dict[str, Any]:
+        # Each sub-task needs its own AsyncSession — sessions are not safe
+        # to share across concurrent tasks.
+        async def _isolated(coro_factory):
+            async with AsyncSessionLocal() as session:
+                return await coro_factory(session)
+
         weekly, pron_trend, readiness, achievements, weak_grammar = (
             await asyncio.gather(
-                self.get_weekly_stats(db),
-                self.get_pronunciation_trend(30, db),
-                self._exam_readiness_safe(db),
-                self._achievement_summary(db),
-                self._grammar_weak_areas(db),
+                _isolated(lambda s: self.get_weekly_stats(s)),
+                _isolated(lambda s: self.get_pronunciation_trend(30, s)),
+                _isolated(lambda s: self._exam_readiness_safe(s)),
+                _isolated(lambda s: self._achievement_summary(s)),
+                _isolated(lambda s: self._grammar_weak_areas(s)),
             )
         )
         return {

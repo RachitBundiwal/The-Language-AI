@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 from sqlalchemy import desc, func, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.orm_models import (
@@ -31,9 +32,13 @@ async def _get_or_create_stats(db: AsyncSession) -> UserStats:
     if stats is None:
         stats = UserStats(id=1)
         db.add(stats)
-        await db.commit()
-        await db.refresh(stats)
-    return stats
+        try:
+            await db.commit()
+            await db.refresh(stats)
+        except IntegrityError:
+            await db.rollback()
+            stats = await db.get(UserStats, 1)
+    return stats  # type: ignore[return-value]
 
 
 def _level_for_xp(xp: int) -> str:

@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from sqlalchemy import desc, func, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.orm_models import (
@@ -100,9 +101,13 @@ async def _get_or_create_stats(db: AsyncSession) -> UserStats:
     if stats is None:
         stats = UserStats(id=1)
         db.add(stats)
-        await db.commit()
-        await db.refresh(stats)
-    return stats
+        try:
+            await db.commit()
+            await db.refresh(stats)
+        except IntegrityError:
+            await db.rollback()
+            stats = await db.get(UserStats, 1)
+    return stats  # type: ignore[return-value]
 
 
 class GamificationService:
@@ -249,9 +254,23 @@ class GamificationService:
             newly_earned.append(row)
 
         if newly_earned:
-            await db.commit()
-            for row in newly_earned:
-                await db.refresh(row)
+            try:
+                await db.commit()
+                for row in newly_earned:
+                    await db.refresh(row)
+            except IntegrityError:
+                # Concurrent writer inserted same achievement(s); roll back and
+                # treat them as already-earned by re-querying.
+                await db.rollback()
+                refreshed_rows = (
+                    await db.execute(select(Achievement.achievement_id))
+                ).all()
+                refreshed_ids = {r[0] for r in refreshed_rows}
+                newly_earned = [
+                    a for a in newly_earned
+                    if a.achievement_id in refreshed_ids
+                    and a.achievement_id not in existing_ids
+                ]
 
         # silence unused trigger argument (kept for caller clarity / future filtering)
         _ = trigger
