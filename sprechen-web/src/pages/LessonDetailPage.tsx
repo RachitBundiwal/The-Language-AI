@@ -15,10 +15,10 @@ import type { LessonDetail } from "@/types";
 type Tab = "overview" | "dialogue" | "grammar" | "exercises";
 
 const TABS: { id: Tab; label: string; icon: typeof BookOpen }[] = [
-  { id: "overview", label: "Übersicht", icon: BookOpen },
-  { id: "dialogue", label: "Dialog", icon: MessageSquare },
-  { id: "grammar", label: "Grammatik", icon: Sparkles },
-  { id: "exercises", label: "Übungen", icon: ListChecks },
+  { id: "overview", label: "Overview", icon: BookOpen },
+  { id: "dialogue", label: "Dialogue", icon: MessageSquare },
+  { id: "grammar", label: "Grammar", icon: Sparkles },
+  { id: "exercises", label: "Exercises", icon: ListChecks },
 ];
 
 export function LessonDetailPage() {
@@ -49,7 +49,7 @@ export function LessonDetailPage() {
         onSuccess: () => {
           setToast({
             open: true,
-            msg: "Lektion abgeschlossen! +XP",
+            msg: "Lesson complete! +XP",
             kind: "success",
           });
           setTimeout(() => navigate("/lessons"), 1500);
@@ -57,18 +57,18 @@ export function LessonDetailPage() {
         onError: () =>
           setToast({
             open: true,
-            msg: "Fehler beim Speichern.",
+            msg: "Error saving progress.",
             kind: "error",
           }),
       },
     );
   };
 
-  if (isLoading) return <div className="text-sm text-gray-500">Lädt …</div>;
+  if (isLoading) return <div className="text-sm text-gray-500">Loading…</div>;
   if (error || !data) {
     return (
       <div className="rounded-lg bg-danger-light p-4 text-sm text-danger">
-        Lektion konnte nicht geladen werden.
+        Could not load lesson.
       </div>
     );
   }
@@ -93,7 +93,7 @@ export function LessonDetailPage() {
         className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-primary"
       >
         <ArrowLeft size={16} />
-        Zurück
+        Back
       </Link>
 
       <div className="rounded-2xl bg-white p-5 shadow-sm">
@@ -135,7 +135,7 @@ export function LessonDetailPage() {
           <div className="space-y-4">
             <div>
               <h3 className="text-sm font-bold uppercase text-gray-500">
-                Lernziele
+                Learning Goals
               </h3>
               <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-gray-700">
                 {data.learning_objectives.map((obj, i) => (
@@ -145,7 +145,7 @@ export function LessonDetailPage() {
             </div>
             <div>
               <h3 className="text-sm font-bold uppercase text-gray-500">
-                Kulturhinweis
+                Cultural Note
               </h3>
               <p className="mt-2 rounded-lg bg-yellow-50 p-3 text-sm text-gray-700">
                 {data.cultural_note}
@@ -153,7 +153,7 @@ export function LessonDetailPage() {
             </div>
             <div>
               <h3 className="text-sm font-bold uppercase text-gray-500">
-                Vokabular ({data.vocabulary_list.length})
+                Vocabulary ({data.vocabulary_list.length})
               </h3>
               <div className="mt-2 grid gap-2 md:grid-cols-2">
                 {data.vocabulary_list.map((v, i) => (
@@ -192,7 +192,7 @@ export function LessonDetailPage() {
             </div>
             <div>
               <h4 className="text-xs font-bold uppercase text-gray-500">
-                Beispiele
+                Examples
               </h4>
               <div className="mt-2 space-y-2">
                 {data.grammar_focus.examples.map((ex, i) => (
@@ -211,7 +211,7 @@ export function LessonDetailPage() {
             {data.grammar_focus.common_mistakes.length > 0 && (
               <div>
                 <h4 className="text-xs font-bold uppercase text-gray-500">
-                  Häufige Fehler
+                  Common Mistakes
                 </h4>
                 <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-gray-700">
                   {data.grammar_focus.common_mistakes.map((m, i) => (
@@ -227,7 +227,7 @@ export function LessonDetailPage() {
           <div>
             <div className="mb-4 flex items-center justify-between text-xs text-gray-500">
               <span>
-                Übung {exerciseIdx + 1} / {data.exercises.length}
+                Exercise {exerciseIdx + 1} / {data.exercises.length}
               </span>
               <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-200 ml-3">
                 <div
@@ -247,7 +247,7 @@ export function LessonDetailPage() {
           </div>
         )}
         {tab === "exercises" && data.exercises.length === 0 && (
-          <p className="text-sm text-gray-500">Keine Übungen vorhanden.</p>
+          <p className="text-sm text-gray-500">No exercises available.</p>
         )}
       </motion.div>
 

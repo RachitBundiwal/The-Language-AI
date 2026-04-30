@@ -143,14 +143,14 @@ async def get_dashboard_stats(db: AsyncSession) -> dict:
     ).scalar_one()
 
     return {
-        "xp_points": stats.xp_points,
-        "streak_days": stats.streak_days,
-        "current_level": stats.current_level,
-        "total_minutes_studied": stats.total_minutes_studied,
+        "xp": stats.xp_points,
+        "streak": stats.streak_days,
+        "level": stats.current_level,
+        "total_minutes": stats.total_minutes_studied,
         "last_active": stats.last_active.isoformat() if stats.last_active else None,
         "lessons_completed": int(lessons_completed or 0),
         "total_lessons": int(total_lessons or 0),
-        "avg_pronunciation": avg_pronunciation,
+        "pronunciation_avg": avg_pronunciation,
         "vocabulary_count": int(vocab_count or 0),
-        "vocab_due_today": int(vocab_due or 0),
+        "vocab_due_count": int(vocab_due or 0),
     }

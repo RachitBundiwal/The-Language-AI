@@ -23,27 +23,22 @@ from models.orm_models import Lesson  # noqa: E402
 async def main() -> int:
     await init_db()
 
+    try:
+        from data.lesson_seeds import seed_default_lessons  # type: ignore
+    except Exception as exc:
+        print(f"ERROR: could not import lesson seeds: {exc}")
+        return 1
+
     async with AsyncSessionLocal() as session:
-        count = (await session.execute(select(func.count(Lesson.id)))).scalar_one()
-        if count and count > 0:
-            print("Database already seeded, skipping.")
-            return 0
-
         try:
-            from data.lesson_seeds import seed_default_lessons  # type: ignore
-        except Exception as exc:
-            print(f"ERROR: could not import lesson seeds: {exc}")
-            return 1
-
-        try:
-            inserted = await seed_default_lessons(session)
+            upserted = await seed_default_lessons(session)
             await session.commit()
         except Exception as exc:
             await session.rollback()
             print(f"ERROR: seeding failed: {exc}")
             return 1
 
-    print(f"Database ready: {inserted} lessons seeded")
+    print(f"Database ready: {upserted} lessons upserted")
     return 0
 
 

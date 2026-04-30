@@ -173,14 +173,14 @@ function ArrangeWords({
 
   return (
     <div>
-      <p className="mb-4 text-sm text-gray-600">Ordne die Wörter zu einem Satz:</p>
+      <p className="mb-4 text-sm text-gray-600">Arrange the words into a sentence:</p>
       <div className="mb-4 flex flex-wrap gap-2">
         {order.map((word, idx) => (
           <button
             key={`${word}-${idx}`}
             onClick={() => move(idx, Math.max(0, idx - 1))}
             className="cursor-grab rounded-lg border-2 border-primary bg-primary-light px-3 py-2 text-sm font-medium text-primary-dark"
-            title="Klick um nach links zu verschieben"
+            title="Click to move left"
           >
             {word}
           </button>
@@ -191,7 +191,7 @@ function ArrangeWords({
           onClick={handleCheck}
           className="rounded-lg bg-primary px-5 py-2 text-sm font-bold text-white hover:bg-primary-dark"
         >
-          Überprüfen
+          Check
         </button>
       ) : (
         <div
@@ -200,11 +200,11 @@ function ArrangeWords({
           }`}
         >
           {checked ? (
-            <p>Richtig!</p>
+            <p>Correct!</p>
           ) : (
             <div>
-              <p className="font-bold">Nicht ganz.</p>
-              <p className="mt-1 text-sm">Korrekt: {ex.correct_sentence}</p>
+              <p className="font-bold">Not quite.</p>
+              <p className="mt-1 text-sm">Correct: {ex.correct_sentence}</p>
             </div>
           )}
           {ex.hint && <p className="mt-2 text-xs text-gray-600">{ex.hint}</p>}
@@ -234,7 +234,7 @@ function Translate({
   };
   return (
     <div>
-      <p className="mb-2 text-sm text-gray-600">Übersetze ins Deutsche:</p>
+      <p className="mb-2 text-sm text-gray-600">Translate into German:</p>
       <p className="mb-4 rounded-lg bg-gray-100 p-4 text-lg italic text-gray-800">
         {ex.source_text}
       </p>
@@ -244,18 +244,18 @@ function Translate({
         disabled={submitted}
         rows={3}
         className="w-full rounded-lg border-2 border-gray-200 p-3 text-sm focus:border-primary focus:outline-none"
-        placeholder="Deine Übersetzung..."
+        placeholder="Your translation..."
       />
       {!submitted ? (
         <button
           onClick={handle}
           className="mt-3 rounded-lg bg-primary px-5 py-2 text-sm font-bold text-white hover:bg-primary-dark"
         >
-          Überprüfen
+          Check
         </button>
       ) : (
         <div className="mt-3 rounded-lg bg-blue-50 p-4">
-          <p className="text-sm font-bold text-gray-900">Musterlösung:</p>
+          <p className="text-sm font-bold text-gray-900">Model answer:</p>
           <p className="mt-1 text-sm text-gray-700">{ex.model_answer}</p>
         </div>
       )}
@@ -277,11 +277,11 @@ function SpeakingPrompt({
   return (
     <div className="rounded-lg border-2 border-primary bg-primary-light p-6">
       <p className="mb-2 text-sm font-bold uppercase text-primary-dark">
-        Sprechübung
+        Speaking Exercise
       </p>
       <p className="text-lg text-gray-900">{ex.prompt_text}</p>
       <p className="mt-2 text-xs text-gray-600">
-        Min. {ex.min_words} Wörter
+        Min. {ex.min_words} words
       </p>
       <button
         onClick={() => {
@@ -293,7 +293,7 @@ function SpeakingPrompt({
         className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2 text-sm font-bold text-white hover:bg-primary-dark"
       >
         <Mic size={16} />
-        Zur Sprachübung
+        Go to Speaking Exercise
       </button>
     </div>
   );
@@ -327,13 +327,13 @@ function Listening({
   return (
     <div>
       <div className="mb-4 rounded-lg bg-gray-100 p-4">
-        <p className="text-xs uppercase text-gray-500">Hörtext</p>
+        <p className="text-xs uppercase text-gray-500">Audio Script</p>
         <p className="mt-1 text-sm text-gray-700">{ex.audio_script}</p>
         <button
           onClick={() => setPlayed(true)}
           className="mt-3 rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white hover:bg-primary-dark"
         >
-          ▶ Abspielen (simuliert)
+          ▶ Play (simulated)
         </button>
       </div>
       {played && (
@@ -370,7 +370,7 @@ function Listening({
               onClick={handleCheck}
               className="rounded-lg bg-primary px-5 py-2 text-sm font-bold text-white hover:bg-primary-dark"
             >
-              Antworten überprüfen
+              Check Answers
             </button>
           )}
         </motion.div>

@@ -32,14 +32,14 @@ export const SCENARIO_EMOJI: Record<string, string> = {
 };
 
 export const SCENARIO_LABEL: Record<string, string> = {
-  bakery: "Bäckerei",
-  doctor: "Arztpraxis",
+  bakery: "Bakery",
+  doctor: "Doctor's Office",
   restaurant: "Restaurant",
-  train_station: "Bahnhof",
-  job_interview: "Vorstellungsgespräch",
-  landlord: "Wohnung",
-  supermarket: "Supermarkt",
-  free: "Freies Gespräch",
+  train_station: "Train Station",
+  job_interview: "Job Interview",
+  landlord: "Apartment",
+  supermarket: "Supermarket",
+  free: "Free Conversation",
 };
 
 export const XP_PER_LEVEL: Record<CEFRLevel, number> = {

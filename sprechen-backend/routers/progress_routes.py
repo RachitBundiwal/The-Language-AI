@@ -186,7 +186,7 @@ async def save_pronunciation(
 @router.get("/pronunciation/history")
 async def pronunciation_history(
     limit: int = 30, db: AsyncSession = Depends(get_db)
-) -> dict:
+) -> List[dict]:
     limit = max(1, min(200, int(limit)))
     stmt = (
         select(PronunciationSession)
@@ -222,7 +222,7 @@ async def pronunciation_history(
         elif diff < -2.0:
             trend = "declining"
 
-    return {"sessions": items, "trend": trend, "count": len(items)}
+    return items
 
 
 # ---------- /vocabulary ----------

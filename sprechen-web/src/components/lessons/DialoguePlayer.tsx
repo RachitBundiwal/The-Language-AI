@@ -38,7 +38,7 @@ export function DialoguePlayer({ dialogue, lessonId }: Props) {
       const audio = new Audio(url);
       await audio.play();
     } catch (e) {
-      setError("Audio konnte nicht geladen werden.");
+      setError("Could not load audio.");
       // eslint-disable-next-line no-console
       console.error("[TTS]", e);
     } finally {
@@ -49,7 +49,7 @@ export function DialoguePlayer({ dialogue, lessonId }: Props) {
   if (dialogue.length === 0) {
     return (
       <div className="rounded-lg bg-gray-50 p-6 text-center text-sm text-gray-500">
-        Kein Dialog für diese Lektion.
+        No dialogue for this lesson.
       </div>
     );
   }
@@ -80,7 +80,7 @@ export function DialoguePlayer({ dialogue, lessonId }: Props) {
               }`}
             >
               <div className="mb-1 text-[10px] font-bold uppercase tracking-wide text-gray-500">
-                {isNative ? "Muttersprachler" : "Lernender"}
+                {isNative ? "Native Speaker" : "Learner"}
               </div>
               <div className="flex items-start gap-2">
                 <p className="flex-1 text-sm font-bold leading-snug">
@@ -90,8 +90,8 @@ export function DialoguePlayer({ dialogue, lessonId }: Props) {
                   onClick={() => playAudio(idx, turn.german)}
                   disabled={loadingIdx !== null}
                   className="shrink-0 rounded-full bg-white/70 p-1.5 text-primary hover:bg-white disabled:opacity-50"
-                  title="Anhören"
-                  aria-label="Anhören"
+                  title="Listen"
+                  aria-label="Listen"
                 >
                   {loadingIdx === idx ? (
                     <Loader2 size={14} className="animate-spin" />
@@ -105,7 +105,7 @@ export function DialoguePlayer({ dialogue, lessonId }: Props) {
                 className="mt-1 flex items-center gap-1 text-[11px] text-gray-500 hover:text-gray-700"
               >
                 {isOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                {isOpen ? "Übersetzung ausblenden" : "Übersetzung anzeigen"}
+                {isOpen ? "Hide translation" : "Show translation"}
               </button>
               {isOpen && (
                 <p className="mt-1 text-xs italic text-gray-600">
